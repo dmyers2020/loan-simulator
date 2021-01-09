@@ -13,7 +13,7 @@ for i in range(numLoans):
 
   amt[i]= float(input(f"Please enter the current principle for loan {i+1}:    "))
 ##  mons[i]= int(input(f"Please enter the term of loan {i+1} in years:    "))*12
-  rate[i] = float(input(f"Enter loan {i+1}'s APR :   %"))/100/12
+  rate[i] = float(input(f"Enter loan {i+1}'s APR :   %"))/100
 
 ## initialize sample loan information
 ## loans is a table with 2 columns: the outstanding principle and the interest rate
@@ -28,7 +28,36 @@ loans = list(zip(amt,rate))
 
 df = pd.DataFrame(loans, columns = ['Principal', 'interest'])
 
-## Calculate maximum repayment periodDirect Consolidation Loan
+## Calculate maximum repayment period
+
+# Direct Consolidation Loan
+# Consolidated Loan calculator
+def wavg(df):
+## takes in the loans dataframe
+## returns the total principal and the weighted average interest rate
+    tru_wavg = sum(df['Principal']*df['interest'])/sum(df['Principal'])
+    # Round up to the nearest higher 1/8th of 1%
+    def rndup2(tru_wavg):
+        # takes in the true weighted average as a decimal (to prevent rounding)
+        # returns the nearest higher one-eighth. of 1%, unless already an eighth.
+
+        w=tru_wavg*100   # as a percentage
+        w_whole = int(w) # whole portion of the precentage
+        fp = w-w_whole  # fractional portion
+
+        for i in range(1,9,1):
+            cep = i/8
+            if fp == cep: #if the fractional portion of the precentage is already an eigth of a percent
+                print('the true weighted average is already an at an eighth of 1%')
+                return(tru_wavg)
+            elif fp < cep:
+                return(w_whole+cep)
+    return(sum(df['Principal']),rndup2(tru_wavg)/100)
+
+consolidated_p_and_i = wavg(df)
+print(consolidated_p_and_i)
+
+## ***add a module that asks if they'll use auto pay for a .25% interest rate reduction on the rndup2(wavg)
 ## or FFEL Consolidation Loan under the Graduated Repayment Plan
 ## depending on total education loan indebtedness.
 
@@ -69,8 +98,10 @@ def mip (bal, i):
     return(ans)
 
 ##set parameters for generating amortization schedules for stepped repayment
-principal = df['Principal'][0]
-interest_rate = df['interest'][0]
+# principal = df['Principal'][0]
+principal = consolidated_p_and_i[0] #sum of balanes within the account - calculated in the consolidated loan function 'wavg()'
+# interest_rate = df['interest'][0]
+interest_rate = consolidated_p_and_i[1] #effective interest rate of the account - calculated in the consolidated loan function 'wavg()'
 tot_periods = ext_repay_period( sum(df['Principal']))*12 #longest repayment, # of periods = months
 period_per_step = 24 #for graduated repayment, two years in each step
 num_steps = m.floor(tot_periods/period_per_step) #number of times your monthly payment will increase
@@ -154,5 +185,3 @@ if print_am_sched in ('Y','y'):
                 numalign="right",
             )
                 )
-
-asdf
