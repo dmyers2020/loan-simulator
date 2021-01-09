@@ -21,7 +21,7 @@ for i in range(numLoans):
 ## ***may add 'loan token' column in future***
 
 ##loans = [[70000, .069], [40000, .055], [20000, 0.024]]
-  
+
 
 # join the lists as columns
 loans = list(zip(amt,rate))
@@ -74,12 +74,12 @@ interest_rate = df['interest'][0]
 tot_periods = ext_repay_period( sum(df['Principal']))*12 #longest repayment, # of periods = months
 period_per_step = 24 #for graduated repayment, two years in each step
 num_steps = m.floor(tot_periods/period_per_step) #number of times your monthly payment will increase
-rgi = .0001 #growth rate initially set to 1.0%, probably won't ever exceed 2%  
+rgi = .0001 #growth rate initially set to 1.0%, probably won't ever exceed 2%
 payment = mip(principal,interest_rate) +5
 
 ##main function
 def bal_after_np(principal, interest_rate, tot_periods, payment, rgi):
-    
+
     """
     Recursively generates amortization schedules for "stepped repayment",
     trying increasing[1] growth rates until a satisfactory[2] one is found
@@ -95,19 +95,19 @@ def bal_after_np(principal, interest_rate, tot_periods, payment, rgi):
     """
 
 ##store original inputs for recursive call
-    p, ir, tp, pmt = principal, interest_rate, tot_periods, payment    
+    p, ir, tp, pmt = principal, interest_rate, tot_periods, payment
 
-##periods start at 1, balance keeps track of the balance after each period  
+##periods start at 1, balance keeps track of the balance after each period
     period = 1
     balance = principal
 
     """
-    
+
     """
-    
+
     for i in range(num_steps):
         step = i
-        
+
         while (step*period_per_step <= period <= period_per_step+ step*period_per_step) and balance>0:
             interest = mip(balance, interest_rate)
             principal = payment - interest
@@ -115,11 +115,11 @@ def bal_after_np(principal, interest_rate, tot_periods, payment, rgi):
             yield period, step, payment, interest, principal, balance, rgi if balance > 0 else 0
             period += 1
         payment = payment + (balance*rgi)
-        
+
 ##    print(balance, rgi) --testing
     if balance > 0:
 ##        print(principal, interest_rate, tot_periods, payment, rgi) --testing
-        rgi +=.00001 #should update this naive approach with something like bracketing to 'zero in' 
+        rgi +=.00001 #should update this naive approach with something like bracketing to 'zero in'
         yield from bal_after_np(p, ir, tp, pmt, rgi)
 
 
@@ -128,7 +128,7 @@ def bal_after_np(principal, interest_rate, tot_periods, payment, rgi):
 table = (x
          for x in bal_after_np(
              principal, interest_rate, tot_periods, payment, rgi)
-         
+
          )
 
 ##headers for the dataframe
@@ -144,10 +144,10 @@ amortization_schedule = a[a.index>len(a)-359]
 print_am_sched= str(input('Do you want to view your amortization schedule now? (Y/N):      '))
 
 if print_am_sched in ('Y','y'):
-    
+
     print(
 
-            tabulate( 
+            tabulate(
                 amortization_schedule,
                 headers=names,
                 floatfmt=",.2f",
@@ -155,19 +155,4 @@ if print_am_sched in ('Y','y'):
             )
                 )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+asdf
