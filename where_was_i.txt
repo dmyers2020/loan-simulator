@@ -1,0 +1,6 @@
+I abandonded this project folder in favor of 'loans2' some of the notes were transfered to OneNote. 
+
+The modular functions stored in this project directory were globbed together in the loans_fresh_start.py script under
+./documents/projects/loans2
+
+

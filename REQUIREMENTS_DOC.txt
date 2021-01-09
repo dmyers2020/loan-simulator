@@ -1,0 +1,25 @@
+## Requirements:
+
+## inputs
+# 1. enter loan information for n loans
+	# principal, interest rate
+# 2. select a repayment schedule: graduated or fixed, long or short
+# 3. select a strategy: snowball OR  optimal
+# 4. select "budget for repayment" by month[group]
+
+## outputs
+# view time to repay
+	# for each loan
+	# total
+	
+# view total interest paid
+	# for each loan
+	# total
+
+# comparison mode: 
+# assuming a constant budget for repayment:
+# compare the total interest and time to repay for all combinations of inputs 2, and 3. 
+
+## bonus
+# see the impact of consolidation
+# run scenario for refinancing.

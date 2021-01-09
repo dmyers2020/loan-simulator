@@ -1,0 +1,54 @@
+12/30 - loans_fresh_start.py is starting to come together. I think the next step is to start modularizing and creating a larger scale plan.
+The script can now generate a full amortization schedule for a stepped repayment plan.
+
+Next steps,
+	figure out how to handle multiple loans and generate a single amortization amount (right now it just handles 1 loan at a time)
+
+	***conceptualize the tool that allows users to input their planned payment amounts by month***
+		find examples of strategy comparisons from the fed website/great lakes
+	
+	figure out why the growth rate is so damn small; like .0001? that seems damn low
+	Enable the user inputs and link them to the calculations for max_repayment duration
+	test to see if it's worth optimizing the rgi finding function I've already got some ideas[1]
+	write quick summary calculations for total time in repayment, total interest paid, etc...
+
+	compute the differences by 'scenario'
+	provide comparison of all options: 
+		long, short, 
+		level, stepped,
+		separate, consolidated
+		snowball, sniping
+	
+	maybe take into consideration expected inflation and the depreciation of your debt overtime
+
+
+
+I copied the directory structure over from the packaging_tutorial and copied the 
+license and setup.py files as well. Before I publish - I need to update those.
+
+https://pypi.org/project/amortization/
+
+Help on package amortization:
+
+NAME
+    amortization
+
+PACKAGE CONTENTS
+    amortize
+    amount
+    schedule
+
+FILE
+    c:\users\david myers\appdata\local\programs\python\python38\lib\site-packages\amortization\__init__.py
+
+
+
+[1]Step size = growth rate. the total number of periods, 
+	if present value(pv) = principal (+/- 1%):
+		break #that's close enough use that growth rate and amortization schedule
+	elif pv < p
+		#take a step up
+		growthrate += 0.001 
+	elif pv > principal:
+		#take a half step back
+		growthrate -=0.0005
