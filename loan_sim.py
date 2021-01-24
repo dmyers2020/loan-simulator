@@ -192,66 +192,23 @@ if print_am_sched in ('Y','y'):
 ams['cumPmt'],ams['cumInt'],ams['cumP']=ams['Payment'].cumsum(),ams['Interest'].cumsum(),ams['Principal'].cumsum()
 
 
+
 import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-subfig = make_subplots(specs=[[{"secondary_y": True}]])
+fig = make_subplots(rows=2,cols=1)
 
-# create two independent figures with px.line each containing data from multiple columns
-fig = px.line(ams, x='Period',y=['Payment','cumPmt','cumInt','cumP','Balance'], render_mode="webgl",)
-fig2 = px.line(ams, x='Period', y=['Payment'], render_mode="webgl",)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumPmt'],name='Cumulative Amount Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumInt'],name='Cumulative Interest Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumP'],name='Cumulative Principal Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['Balance'],name='Remainig Balance'),row=1,col=1)
 
-
-fig2.update_traces(yaxis="y2")
-
-subfig.add_traces(fig.data + fig2.data)
-subfig.layout.xaxis.title="Time"
-subfig.layout.yaxis.title="$"
-subfig.layout.yaxis2.type="linear"
-subfig.layout.yaxis2.title="small$"
-# recoloring is necessary otherwise lines from fig und fig2 would share each color
-# e.g. Linear-, Log- = blue; Linear+, Log+ = red... we don't want this
-subfig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
-subfig.show()
-
-##fig1 = px.line(ams, x='Period',y=['Payment','cumPmt','cumInt','cumP','Balance'])
-##fig1.add_bar(ams, x='Period', y=['Payment'], name ='Minimum Payment',allignmentgroup = "Step")
-##fig1.show()
-
-"""
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
-# Create figure with secondary y-axis
-fig = make_subplots(specs=[[{"secondary_y": True}]])
-
-# Add traces
-fig.add_trace(
-    go.Scatter(x=[1, 2, 3], y=[40, 50, 60], name="yaxis data"),
-    secondary_y=False,
-)
-
-fig.add_trace(
-    go.Scatter(x=[2, 3, 4], y=[4, 5, 6], name="yaxis2 data"),
-    secondary_y=True,
-)
-
-# Add figure title
-fig.update_layout(
-    title_text="Double Y Axis Example"
-)
-
-# Set x-axis title
-fig.update_xaxes(title_text="xaxis title")
-
-# Set y-axes titles
-fig.update_yaxes(title_text="<b>primary</b> yaxis title", secondary_y=False)
-fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+fig.add_trace(go.Line(x=ams['Period'], y=ams['Payment'],name='Minimum Monthly'),row=2,col=1)              
 
 fig.show()
-"""
+
 
 '''
 df = px.data.gapminder()
