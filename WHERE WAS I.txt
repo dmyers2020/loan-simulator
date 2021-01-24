@@ -1,3 +1,13 @@
+1/24/21 - (Go read prior update as well)
+tinkered with some visualizations - spent way too much time generating plots.
+Should have stuck to 'Next Steps' which should begin with planning, then
+I need to modularize the functions. Gotta figure out how to enter my planned payments
+and see the impact - that should be a very well documented thing. Like:
+Here's my Principal, interest, term, and monthly min. If I pay X/mo - show me what happens.
+I just need to apply that over the amortization_schedule.
+
+
+
 12/31 -
 	used consolidated loan calculator to figure out account-level interest rate
  uses the weighted average rounded up to nearest 1/8th of a percent; may not be
