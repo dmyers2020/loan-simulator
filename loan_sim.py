@@ -6,8 +6,9 @@ import math as m
 import amortization as am
 from tabulate import tabulate
 
+"""
 ## have the user enter their loan information
-numLoans=int(input('How many loans do you have?:      '))
+##numLoans=int(input('How many loans do you have?:      '))
 amt,mons,rate,monthly_pay, monthly_due =[None]*numLoans,[None]*numLoans,[None]*numLoans,[None]*numLoans,[None]*numLoans
 for i in range(numLoans):
 
@@ -15,16 +16,16 @@ for i in range(numLoans):
 ##  mons[i]= int(input(f"Please enter the term of loan {i+1} in years:    "))*12
   rate[i] = float(input(f"Enter loan {i+1}'s APR :   %"))/100
 
+# join the lists as columns
+loans = list(zip(amt,rate))
+"""
 ## initialize sample loan information
 ## loans is a table with 2 columns: the outstanding principle and the interest rate
 
 ## ***may add 'loan token' column in future***
 
-##loans = [[70000, .069], [40000, .055], [20000, 0.024]]
+loans = [[70000, .069], [40000, .055], [20000, 0.024]]
 
-
-# join the lists as columns
-loans = list(zip(amt,rate))
 
 df = pd.DataFrame(loans, columns = ['Principal', 'interest'])
 
@@ -170,8 +171,8 @@ a = pd.DataFrame(data = table, columns = names)
 
 ##the final amortization schedule
 amortization_schedule = a[a.index>len(a)-359]
-
-
+ams = amortization_schedule
+"""
 print_am_sched= str(input('Do you want to view your amortization schedule now? (Y/N):      '))
 
 if print_am_sched in ('Y','y'):
@@ -185,3 +186,95 @@ if print_am_sched in ('Y','y'):
                 numalign="right",
             )
                 )
+"""
+
+##add running sums
+ams['cumPmt'],ams['cumInt'],ams['cumP']=ams['Payment'].cumsum(),ams['Interest'].cumsum(),ams['Principal'].cumsum()
+
+
+import plotly
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+subfig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# create two independent figures with px.line each containing data from multiple columns
+fig = px.line(ams, x='Period',y=['Payment','cumPmt','cumInt','cumP','Balance'], render_mode="webgl",)
+fig2 = px.line(ams, x='Period', y=['Payment'], render_mode="webgl",)
+
+
+fig2.update_traces(yaxis="y2")
+
+subfig.add_traces(fig.data + fig2.data)
+subfig.layout.xaxis.title="Time"
+subfig.layout.yaxis.title="$"
+subfig.layout.yaxis2.type="linear"
+subfig.layout.yaxis2.title="small$"
+# recoloring is necessary otherwise lines from fig und fig2 would share each color
+# e.g. Linear-, Log- = blue; Linear+, Log+ = red... we don't want this
+subfig.for_each_trace(lambda t: t.update(line=dict(color=t.marker.color)))
+subfig.show()
+
+##fig1 = px.line(ams, x='Period',y=['Payment','cumPmt','cumInt','cumP','Balance'])
+##fig1.add_bar(ams, x='Period', y=['Payment'], name ='Minimum Payment',allignmentgroup = "Step")
+##fig1.show()
+
+"""
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Create figure with secondary y-axis
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+# Add traces
+fig.add_trace(
+    go.Scatter(x=[1, 2, 3], y=[40, 50, 60], name="yaxis data"),
+    secondary_y=False,
+)
+
+fig.add_trace(
+    go.Scatter(x=[2, 3, 4], y=[4, 5, 6], name="yaxis2 data"),
+    secondary_y=True,
+)
+
+# Add figure title
+fig.update_layout(
+    title_text="Double Y Axis Example"
+)
+
+# Set x-axis title
+fig.update_xaxes(title_text="xaxis title")
+
+# Set y-axes titles
+fig.update_yaxes(title_text="<b>primary</b> yaxis title", secondary_y=False)
+fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+
+fig.show()
+"""
+
+'''
+df = px.data.gapminder()
+fig = px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", animation_group="country",
+           size="pop", color="continent", hover_name="country",
+           log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
+
+fig["layout"].pop("updatemenus") # optional, drop animation buttons
+fig.show()
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
