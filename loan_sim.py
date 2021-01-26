@@ -6,8 +6,9 @@ import math as m
 import amortization as am
 from tabulate import tabulate
 
+"""
 ## have the user enter their loan information
-numLoans=int(input('How many loans do you have?:      '))
+##numLoans=int(input('How many loans do you have?:      '))
 amt,mons,rate,monthly_pay, monthly_due =[None]*numLoans,[None]*numLoans,[None]*numLoans,[None]*numLoans,[None]*numLoans
 for i in range(numLoans):
 
@@ -15,16 +16,16 @@ for i in range(numLoans):
 ##  mons[i]= int(input(f"Please enter the term of loan {i+1} in years:    "))*12
   rate[i] = float(input(f"Enter loan {i+1}'s APR :   %"))/100
 
+# join the lists as columns
+loans = list(zip(amt,rate))
+"""
 ## initialize sample loan information
 ## loans is a table with 2 columns: the outstanding principle and the interest rate
 
 ## ***may add 'loan token' column in future***
 
-##loans = [[70000, .069], [40000, .055], [20000, 0.024]]
+loans = [[70000, .069], [40000, .055], [20000, 0.024]]
 
-
-# join the lists as columns
-loans = list(zip(amt,rate))
 
 df = pd.DataFrame(loans, columns = ['Principal', 'interest'])
 
@@ -170,8 +171,8 @@ a = pd.DataFrame(data = table, columns = names)
 
 ##the final amortization schedule
 amortization_schedule = a[a.index>len(a)-359]
-
-
+ams = amortization_schedule
+"""
 print_am_sched= str(input('Do you want to view your amortization schedule now? (Y/N):      '))
 
 if print_am_sched in ('Y','y'):
@@ -185,3 +186,52 @@ if print_am_sched in ('Y','y'):
                 numalign="right",
             )
                 )
+"""
+
+##add running sums
+ams['cumPmt'],ams['cumInt'],ams['cumP']=ams['Payment'].cumsum(),ams['Interest'].cumsum(),ams['Principal'].cumsum()
+
+
+
+import plotly
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+fig = make_subplots(rows=2,cols=1)
+
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumPmt'],name='Cumulative Amount Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumInt'],name='Cumulative Interest Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['cumP'],name='Cumulative Principal Paid'),row=1,col=1)
+fig.add_trace(go.Line(x=ams['Period'],y=ams['Balance'],name='Remainig Balance'),row=1,col=1)
+
+fig.add_trace(go.Line(x=ams['Period'], y=ams['Payment'],name='Minimum Monthly'),row=2,col=1)              
+
+fig.show()
+
+
+'''
+df = px.data.gapminder()
+fig = px.scatter(df, x="gdpPercap", y="lifeExp", animation_frame="year", animation_group="country",
+           size="pop", color="continent", hover_name="country",
+           log_x=True, size_max=55, range_x=[100,100000], range_y=[25,90])
+
+fig["layout"].pop("updatemenus") # optional, drop animation buttons
+fig.show()
+'''
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
