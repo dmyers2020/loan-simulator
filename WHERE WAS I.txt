@@ -1,3 +1,32 @@
+7/23/23
+I have been using chatGPT3.5 and BARD (much less so) to assit me in creating this script.
+I made a lot of progress but I did not follow any good practice about version control or progress logging.
+I am trying to clean up the project folder and file versions now so I can make use of git. 
+I would probably do well to start tracking improvements, bugs, and new feature tickets in a more formal way. 
+
+
+8/18/2021
+Thought about how I would actually apply payments- need to consider how often
+the new minimum payment is calculated and how much can go straight to principal.
+Also, how to ensure that the excess always goes to the highest interest loan first.
+
+8/17/2021
+researched existing options for multi-selecting sliders.
+keywords: range sliders, interlinked, binding, synchronized, linked
+
+similar to using digital audio adjustments
+https://www.w3schools.com/howto/howto_js_rangeslider.asp
+https://stackoverflow.com/questions/60060048/interlinked-multiple-sliders-in-swiftui
+
+
+I think this gets me close - but the JSFIDDLE throws a script error
+https://stackoverflow.com/questions/37402189/sync-multiple-slick-sliders-together
+
+I think the idea would be that when the user clicks and drags; that creates a
+selection of all the desired input sliders. Then creates a "handle" which,
+when slid; proportionately adjusts all input sliders at once.311
+
+
 1/24/21 - (Go read prior update as well)
 tinkered with some visualizations - spent way too much time generating plots.
 Should have stuck to 'Next Steps' which should begin with planning, then
